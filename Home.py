@@ -12,69 +12,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# CSS NOIR ET BLANC
-st.markdown("""
-<style>
-    .stApp { background-color: #ffffff; }
-    #MainMenu, footer, header { visibility: hidden; }
-    [data-testid="stSidebar"] { display: none; }
-    
-    p, span, div, label, h1, h2, h3 { color: #000000 !important; }
-    
-    .main-title {
-        text-align: center;
-        font-size: 48px;
-        font-weight: 700;
-        margin: 40px 0 10px 0;
-    }
-    
-    .subtitle {
-        text-align: center;
-        font-size: 18px;
-        margin-bottom: 40px;
-        color: #666 !important;
-    }
-    
-    .stButton > button {
-        background-color: #000000;
-        color: #ffffff !important;
-        border: none;
-        border-radius: 8px;
-        padding: 12px 24px;
-        font-size: 16px;
-    }
-    .stButton > button:hover { background-color: #333; }
-    
-    .locked-icon {
-        font-size: 80px;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    
-    .guide-section {
-        background: #f9f9f9;
-        border-radius: 12px;
-        padding: 20px;
-        margin: 15px 0;
-        border-left: 4px solid #000;
-    }
-    
-    .level-badge {
-        display: inline-block;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-weight: 600;
-        font-size: 12px;
-        margin-right: 8px;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# ============================================
-# CODES D'ACCÈS
-# ============================================
-VALID_CODES = {"TDJ2024", "NASH", "PARETO", "JEUX", "MIASHS"}
-
 # ============================================
 # SESSION STATE
 # ============================================
@@ -84,10 +21,74 @@ if "guide_seen" not in st.session_state:
     st.session_state.guide_seen = False
 
 # ============================================
+# CSS
+# ============================================
+if not st.session_state.authenticated or not st.session_state.guide_seen:
+    # Cacher sidebar avant connexion et pendant le guide
+    st.markdown("""
+    <style>
+        .stApp { background-color: #ffffff; }
+        #MainMenu, footer, header { visibility: hidden; }
+        [data-testid="stSidebar"] { display: none; }
+        p, span, div, label, h1, h2, h3 { color: #000000 !important; }
+        
+        .stButton > button {
+            background-color: #000000;
+            color: #ffffff !important;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+        }
+        .stButton > button:hover { background-color: #333; }
+        
+        .guide-section {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #000;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+else:
+    # Montrer sidebar après connexion
+    st.markdown("""
+    <style>
+        .stApp { background-color: #ffffff; }
+        #MainMenu, footer, header { visibility: hidden; }
+        p, span, div, label, h1, h2, h3 { color: #000000 !important; }
+        
+        .stButton > button {
+            background-color: #000000;
+            color: #ffffff !important;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+        }
+        .stButton > button:hover { background-color: #333; }
+        
+        .guide-section {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #000;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+# ============================================
+# CODES D'ACCÈS
+# ============================================
+VALID_CODES = {"TDJ2024", "NASH", "PARETO", "JEUX", "MIASHS"}
+
+# ============================================
 # PAGE LOGIN
 # ============================================
 def page_login():
-    st.markdown('<div class="locked-icon">🎮</div>', unsafe_allow_html=True)
+    st.markdown('<div style="text-align:center;font-size:80px;margin-top:50px;">🎮</div>', unsafe_allow_html=True)
     st.markdown('<h1 style="text-align:center;margin-bottom:5px;">MIASHS</h1>', unsafe_allow_html=True)
     st.markdown('<p style="text-align:center;color:#666!important;font-size:18px;">Quiz Théorie des Jeux</p>', unsafe_allow_html=True)
     
@@ -113,8 +114,9 @@ def page_login():
 # PAGE GUIDE
 # ============================================
 def page_guide():
-    st.markdown('<div class="main-title">🎮 Bienvenue !</div>', unsafe_allow_html=True)
-    st.markdown('<div class="subtitle">Ton guide pour réussir l\'exam de Théorie des Jeux</div>', unsafe_allow_html=True)
+    st.markdown('<div style="text-align:center;font-size:48px;margin-top:20px;">🎮</div>', unsafe_allow_html=True)
+    st.markdown('<h1 style="text-align:center;">Bienvenue !</h1>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align:center;color:#666!important;">Ton guide pour réussir l\'exam de Théorie des Jeux</p>', unsafe_allow_html=True)
     
     # Niveau 1
     st.markdown("""
@@ -203,53 +205,45 @@ def page_guide():
 # PAGE MENU PRINCIPAL
 # ============================================
 def page_menu():
-    st.markdown('<div class="main-title">🎮 MIASHS</div>', unsafe_allow_html=True)
-    st.markdown('<div class="subtitle">Choisis ton mode de révision</div>', unsafe_allow_html=True)
+    st.markdown('<h1 style="text-align:center;">🎮 MIASHS</h1>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align:center;color:#666!important;">Choisis ton mode de révision</p>', unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Instructions
+    st.success("👈 **Utilise le menu à gauche** pour accéder aux Blocs et au Quiz !")
+    
+    st.markdown("<br>", unsafe_allow_html=True)
     
     # Bouton guide
-    col1, col2, col3 = st.columns([2, 1, 2])
+    col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
-        if st.button("📋 Guide", use_container_width=True):
+        if st.button("📋 Revoir le guide", use_container_width=True):
             st.session_state.guide_seen = False
             st.rerun()
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Instructions
-    st.info("👈 **Utilise le menu à gauche** pour naviguer entre les blocs et le quiz !")
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    
     # Récap des blocs
-    st.markdown("### 📚 Niveaux 1 & 2 — Étudier & QCM")
+    st.markdown("### 📚 Ce qui est disponible")
     
-    blocs_info = """
-    | Bloc | Contenu | Questions |
+    st.markdown("""
+    | Page | Contenu | Questions |
     |------|---------|-----------|
     | 🎯 Bloc A | Jeux Finis (matrices, Nash, BR, Pareto) | 18 |
     | 📈 Bloc B | Jeux Continus (dérivation, CPO, système) | 12 |
     | 🎲 Bloc C | Stratégies Mixtes (p*, q*, indifférence) | 12 |
     | ⚖️ Bloc D | Somme Nulle (maximin, minimax, point-selle) | 10 |
-    """
-    st.markdown(blocs_info)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    
-    st.markdown("### 🎯 Niveau 3 — Quiz Chronométré")
-    st.markdown("⏱️ **30 questions en 20 minutes** — Conditions d'examen")
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    
-    st.markdown("### 🏆 Niveau 4 — Exercices Rédaction")
-    st.markdown("📝 *Bientôt disponible...*")
+    | ⏱️ Quiz | Quiz chronométré (30 questions, 20 min) | 30 |
+    """)
     
     # Footer
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown("""
     <div style="text-align:center;padding:20px;background:#f9f9f9;border-radius:12px;">
         <span style="font-size:32px;">📊</span><br>
-        <b>52 questions disponibles</b><br>
-        <span style="color:#666!important;">+ Quiz chronométré</span>
+        <b>52 questions de révision + Quiz chronométré</b><br>
+        <span style="color:#666!important;">Bonne révision ! 🎓</span>
     </div>
     """, unsafe_allow_html=True)
     
